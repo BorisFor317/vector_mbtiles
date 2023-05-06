@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -79,32 +81,31 @@ class _MyHomePageState extends State<MyHomePage> {
           child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: LatLng(35.68132332775388, 139.76712479771956),
+                center: LatLng(47.159510, 9.553648),
+                // center: LatLng(30, 31),
                 zoom: 15,
-                maxZoom: 18,
+                maxZoom: 19,
                 // plugins: [VectorMapTilesPlugin()],
               ),
               children: [
                 VectorTileLayer(
                   key: const Key('VectorTileLayerWidget'),
-                  theme: _mapTheme(context),
-                  tileProviders: TileProviders(
-                      {'openmaptiles': _cachingTileProvider(_basemapPath())}),
+                  // theme: _mapTheme(context),
+                  theme: OSMBrightTheme.osmBrightJaTheme(),
+                  tileProviders: TileProviders({
+                    'openmaptiles': VectorMBTilesProvider(
+                        mbtilesPath: _basemapPath(),
+                        // this is the maximum zoom of the provider, not the
+                        // maximum of the map. vector tiles are rendered
+                        // to larger sizes to support higher zoom levels
+                        maximumZoom: 15,
+                        // option to use map with uncompressed tiles
+                        tileCompression: TileCompression.none)
+                  }),
                 ),
               ]),
         ));
   }
-}
-
-VectorTileProvider _cachingTileProvider(String mbtilesPath) {
-  return MemoryCacheVectorTileProvider(
-      delegate: VectorMBTilesProvider(
-          mbtilesPath: mbtilesPath,
-          // this is the maximum zoom of the provider, not the
-          // maximum of the map. vector tiles are rendered
-          // to larger sizes to support higher zoom levels
-          maximumZoom: 14),
-      maxSizeBytes: 1024 * 1024 * 2);
 }
 
 _mapTheme(BuildContext context) {
@@ -120,5 +121,5 @@ extension OSMBrightTheme on ProvidedThemes {
 }
 
 String _basemapPath() {
-  return 'assets/example.mbtiles';
+  return 'assets/liechtenstein-none.mbtiles';
 }

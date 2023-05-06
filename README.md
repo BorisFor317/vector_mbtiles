@@ -44,3 +44,26 @@ VectorTileLayerWidget(
     ),
 )
 ```
+
+## Fork changes
+
+### Uncompressed tiles
+
+Added support of reading uncompressed tiles from database. This could speed up loading of tiles on low power devices.
+
+To use this option supply `TileCompression.none` to the constructor of `VectorMBTilesProvider` class
+
+```dart
+VectorMBTilesProvider(
+  mbtilesPath: _basemapPath(),
+  // this is the maximum zoom of the provider, not the
+  // maximum of the map. vector tiles are rendered
+  // to larger sizes to support higher zoom levels
+  maximumZoom: 15,
+  // option to use map with uncompressed tiles
+  tileCompression: TileCompression.none)
+```
+
+### Linux support
+
+Added (sqflite_common_ffi)[https://pub.dev/packages/sqflite_common_ffi] package to enable work on Linux and Windows.

@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
+import 'package:vector_mbtiles/src/vector_mbtiles_provider.dart';
 
 import 'provider_exception.dart';
 
@@ -12,10 +14,13 @@ import 'provider_exception.dart';
 class MBTilesUtility {
   /// A constructor of `MBTilesUtility` class.
   /// [_mbtilesPath] MBTiles path
-  MBTilesUtility(this._mbtilesPath) {
+  /// [_tileCompression] option to set tile compression
+  MBTilesUtility(this._mbtilesPath, this._tileCompression) {
     getDBFuture = _getDatabase(_mbtilesPath);
   }
+
   final String _mbtilesPath;
+  final TileCompression _tileCompression;
   Database? _database;
   late Future<Database> getDBFuture;
 
@@ -46,8 +51,17 @@ class MBTilesUtility {
 
     if (resultSet.length == 1) {
       final tileData = resultSet.first['tile_data'];
-      final ungzipTile = GZipCodec().decode(tileData! as Uint8List);
-      return ungzipTile as Uint8List;
+      Uint8List extractedTile;
+      switch (_tileCompression) {
+        case TileCompression.gzip:
+          extractedTile =
+              GZipCodec().decode(tileData! as Uint8List) as Uint8List;
+          break;
+        case TileCompression.none:
+          extractedTile = tileData! as Uint8List;
+          break;
+      }
+      return extractedTile;
     } else if (resultSet.length > 1) {
       throw ProviderException(
         message: 'Too many match tiles',
@@ -59,12 +73,17 @@ class MBTilesUtility {
   }
 
   Future<Database> _getDatabase(String url) async {
-    String databasesPath;
     String dbFullPath;
-    final dbFilename = url.split('/').last;
 
-    databasesPath = await getDatabasesPath();
-    dbFullPath = path.join(databasesPath, dbFilename);
+    if (Platform.isLinux || Platform.isWindows) {
+      databaseFactory = databaseFactoryFfi;
+      await databaseFactoryFfi.setDatabasesPath(Directory.current.path);
+      dbFullPath = url;
+    } else {
+      final dbFilename = url.split('/').last;
+      var databasesPath = await getDatabasesPath();
+      dbFullPath = path.join(databasesPath, dbFilename);
+    }
 
     final exists = await databaseExists(dbFullPath);
     if (!exists) {

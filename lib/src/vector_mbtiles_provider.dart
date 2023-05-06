@@ -8,6 +8,8 @@ import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'mbtiles_utility.dart';
 import 'provider_exception.dart';
 
+enum TileCompression { gzip, none }
+
 /// Vector MBTiles Provider.
 class VectorMBTilesProvider extends VectorTileProvider {
   /// [mbtilesPath] the URL template, e.g. `'assets/data/map.mbtiles'`
@@ -15,10 +17,13 @@ class VectorMBTilesProvider extends VectorTileProvider {
   ///  confused with the maximum zoom of the map widget. The map widget will
   ///  automatically use vector tiles from lower zoom levels once the maximum
   ///  supported by this provider is reached.
-  VectorMBTilesProvider({required String mbtilesPath, int maximumZoom = 16})
-      : _mbtilesURL = mbtilesPath,
+  VectorMBTilesProvider({
+    required String mbtilesPath,
+    int maximumZoom = 16,
+    TileCompression tileCompression = TileCompression.gzip,
+  })  : _mbtilesURL = mbtilesPath,
         _maximumZoom = maximumZoom {
-    _mbTiles = MBTilesUtility(_mbtilesURL);
+    _mbTiles = MBTilesUtility(_mbtilesURL, tileCompression);
   }
   final String _mbtilesURL;
   final int _maximumZoom;
