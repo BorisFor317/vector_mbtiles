@@ -66,4 +66,4 @@ VectorMBTilesProvider(
 
 ### Linux support
 
-Added (sqflite_common_ffi)[https://pub.dev/packages/sqflite_common_ffi] package to enable work on Linux and Windows.
+Added [sqflite_common_ffi](https://pub.dev/packages/sqflite_common_ffi) package to enable work on Linux and Windows.
