@@ -1,13 +1,10 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:vector_mbtiles/src/vector_mbtiles_provider.dart';
-
 import 'provider_exception.dart';
 
 /// MBTilesUtility is MBTiles access utility.
@@ -78,19 +75,25 @@ class MBTilesUtility {
     if (Platform.isLinux || Platform.isWindows) {
       databaseFactory = databaseFactoryFfi;
       await databaseFactoryFfi.setDatabasesPath(Directory.current.path);
+
       dbFullPath = url;
     } else {
       final dbFilename = url.split('/').last;
-      var databasesPath = await getDatabasesPath();
+      final databasesPath = await getDatabasesPath();
       dbFullPath = path.join(databasesPath, dbFilename);
     }
 
+    print('dbFullPath ${dbFullPath}');
     final exists = await databaseExists(dbFullPath);
+    print('does exists: ${exists}');
     if (!exists) {
-      final data = await rootBundle.load(url);
-      final List<int> bytes = data.buffer.asUint8List(
-        data.offsetInBytes,
-        data.lengthInBytes,
+      final file = File(_mbtilesPath);
+      final customBytes = await file.readAsBytes(); // Uint8List
+      final byteData = customBytes.buffer.asByteData();
+
+      final List<int> bytes = byteData.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
       );
 
       await File(dbFullPath).writeAsBytes(bytes, flush: true);
