@@ -44,22 +44,59 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+const maxMapZoom = 20.4; // 14.4
+const minMapZoom = 5.5;
+
 class _MyHomePageState extends State<MyHomePage> {
   final MapController _mapController = MapController();
   bool isOpen = false;
 
   File? file;
+  double currentMapZoom = 14.4;
+  void moveToCurrentPosition() =>
+      _mapController.move(LatLng(53.965965, 30.384345), currentMapZoom);
+
+  void zoomCamera() {
+    if (currentMapZoom <= maxMapZoom - 1) {
+      currentMapZoom = currentMapZoom + 1;
+
+      moveToCurrentPosition();
+    }
+    print('zoom $currentMapZoom');
+  }
+
+  void unZoomCamera() {
+    if (currentMapZoom >= minMapZoom) {
+      currentMapZoom = currentMapZoom - 1;
+      moveToCurrentPosition();
+    }
+    print('zoom $currentMapZoom');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () => zoomCamera(),
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: () => unZoomCamera(),
+            child: const Icon(Icons.exposure_minus_1_rounded),
+          ),
+        ],
+      ),
       body: isOpen
           ? FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: LatLng(47.159510, 9.553648),
-                zoom: 15,
-                maxZoom: 19,
+                // 47.159510, 9.553648 -- lihten
+                center: LatLng(53.965965, 30.384345),
+                zoom: currentMapZoom,
+                maxZoom: maxMapZoom,
               ),
               children: [
                   VectorTileLayer(
@@ -67,11 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     theme: OSMBrightTheme.osmBrightJaTheme(),
                     tileProviders: TileProviders({
                       'openmaptiles': VectorMBTilesProvider(
-                        //    mbtilesPath: 'assets/liechtenstein-none.mbtiles',
-                        //'/data/user/0/com.example.example/cache/file_picker/liechtenstein-none.mbtiles'
                         mbtilesPath: file!.path,
                         maximumZoom: 15,
-                        tileCompression: TileCompression.none,
+                        //    tileCompression: TileCompression.none,
                       )
                     }),
                   ),
@@ -79,13 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     markers: [
                       Marker(
                         width: 80,
-                        height: 50,
-                        point: LatLng(47.159510, 9.553648),
+                        height: 60,
+                        point: LatLng(53.965965, 30.384345),
                         builder: (context) => const Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CircleAvatar(),
-                            FittedBox(child: Text('47.159510, 9.553648')),
+                            FittedBox(child: Text('hi there')),
                           ],
                         ),
                       )
