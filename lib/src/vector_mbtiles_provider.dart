@@ -4,7 +4,6 @@ library vector_mbtiles;
 import 'dart:typed_data';
 
 import 'package:vector_map_tiles/vector_map_tiles.dart';
-
 import 'mbtiles_utility.dart';
 import 'provider_exception.dart';
 
@@ -20,15 +19,23 @@ class VectorMBTilesProvider extends VectorTileProvider {
   VectorMBTilesProvider({
     required String mbtilesPath,
     int maximumZoom = 16,
+    int minimumZoom = 1,
     TileCompression tileCompression = TileCompression.gzip,
   })  : _mbtilesURL = mbtilesPath,
-        _maximumZoom = maximumZoom {
+        _maximumZoom = maximumZoom,
+        _minZoom = minimumZoom {
     _mbTiles = MBTilesUtility(_mbtilesURL, tileCompression);
   }
   final String _mbtilesURL;
+
   final int _maximumZoom;
+
+  final int _minZoom;
+
   late MBTilesUtility _mbTiles;
 
+  @override
+  int get minimumZoom => _minZoom;
   @override
   int get maximumZoom => _maximumZoom;
 

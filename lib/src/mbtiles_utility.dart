@@ -53,10 +53,9 @@ class MBTilesUtility {
         case TileCompression.gzip:
           extractedTile =
               GZipCodec().decode(tileData! as Uint8List) as Uint8List;
-          break;
+
         case TileCompression.none:
           extractedTile = tileData! as Uint8List;
-          break;
       }
       return extractedTile;
     } else if (resultSet.length > 1) {

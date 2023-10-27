@@ -50,6 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   File? file;
 
+  final lih = LatLng(47.159510, 9.553648);
+
+  final belarus = LatLng(53.913651, 27.652945);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ? FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: LatLng(47.159510, 9.553648),
-                zoom: 15,
-                maxZoom: 19,
+                center: belarus,
+                zoom: 14,
+                maxZoom: 15.4, // max zoom
               ),
               children: [
                   VectorTileLayer(
@@ -67,29 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     theme: OSMBrightTheme.osmBrightJaTheme(),
                     tileProviders: TileProviders({
                       'openmaptiles': VectorMBTilesProvider(
-                        //    mbtilesPath: 'assets/liechtenstein-none.mbtiles',
-                        //'/data/user/0/com.example.example/cache/file_picker/liechtenstein-none.mbtiles'
-                        mbtilesPath: file!.path,
-                        maximumZoom: 15,
-                        tileCompression: TileCompression.none,
+                        mbtilesPath:
+                            '/data/user/0/com.example.example/cache/file_picker/belarus-gzip.mbtiles',
+                        tileCompression: TileCompression.gzip,
                       )
                     }),
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80,
-                        height: 50,
-                        point: LatLng(47.159510, 9.553648),
-                        builder: (context) => const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(),
-                            FittedBox(child: Text('47.159510, 9.553648')),
-                          ],
-                        ),
-                      )
-                    ],
                   ),
                 ])
           : Center(
@@ -97,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   FilePickerResult? result =
                       await FilePicker.platform.pickFiles();
-// /data/user/0/com.example.example/databases/example.mbtiles
+
                   if (result != null) {
                     log('result.files.single.path! ${result.files.single.path!}');
 
