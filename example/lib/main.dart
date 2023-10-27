@@ -46,6 +46,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final MapController _mapController = MapController();
+
+  bool alreadyPickedMode = false;
+
   bool isOpen = false;
 
   File? file;
@@ -57,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isOpen
+      body: alreadyPickedMode
           ? FlutterMap(
               mapController: _mapController,
               options: MapOptions(
@@ -78,26 +81,47 @@ class _MyHomePageState extends State<MyHomePage> {
                     }),
                   ),
                 ])
-          : Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
+          : isOpen
+              ? FlutterMap(
+                  mapController: _mapController,
+                  options: MapOptions(
+                    center: belarus,
+                    zoom: 14,
+                    maxZoom: 15.4, // max zoom
+                  ),
+                  children: [
+                      VectorTileLayer(
+                        key: const Key('VectorTileLayerWidget'),
+                        theme: OSMBrightTheme.osmBrightJaTheme(),
+                        tileProviders: TileProviders({
+                          'openmaptiles': VectorMBTilesProvider(
+                            mbtilesPath:
+                                '/data/user/0/com.example.example/cache/file_picker/belarus-gzip.mbtiles',
+                            tileCompression: TileCompression.gzip,
+                          )
+                        }),
+                      ),
+                    ])
+              : Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles();
 
-                  if (result != null) {
-                    log('result.files.single.path! ${result.files.single.path!}');
+                      if (result != null) {
+                        log('result.files.single.path! ${result.files.single.path!}');
 
-                    file = File(result.files.last.path!);
-                    setState(() {
-                      isOpen = true;
-                    });
-                  } else {
-                    // User canceled the picker
-                  }
-                },
-                child: const Text('open'),
-              ),
-            ),
+                        file = File(result.files.last.path!);
+                        setState(() {
+                          isOpen = true;
+                        });
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: const Text('open'),
+                  ),
+                ),
     );
   }
 }
