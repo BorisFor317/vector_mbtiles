@@ -47,20 +47,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final MapController _mapController = MapController();
 
-  bool alreadyPickedMode = false;
-
   bool isOpen = false;
 
   File? file;
 
   final lih = LatLng(47.159510, 9.553648);
 
-  final belarus = LatLng(53.913651, 27.652945);
+  final belarus = LatLng(53.860543, 27.681657); // mkad
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: alreadyPickedMode
+      body: isOpen
           ? FlutterMap(
               mapController: _mapController,
               options: MapOptions(
@@ -74,54 +72,32 @@ class _MyHomePageState extends State<MyHomePage> {
                     theme: OSMBrightTheme.osmBrightJaTheme(),
                     tileProviders: TileProviders({
                       'openmaptiles': VectorMBTilesProvider(
-                        mbtilesPath:
-                            '/data/user/0/com.example.example/cache/file_picker/belarus-gzip.mbtiles',
+                        mbtilesPath: file!.path,
                         tileCompression: TileCompression.gzip,
                       )
                     }),
                   ),
                 ])
-          : isOpen
-              ? FlutterMap(
-                  mapController: _mapController,
-                  options: MapOptions(
-                    center: belarus,
-                    zoom: 14,
-                    maxZoom: 15.4, // max zoom
-                  ),
-                  children: [
-                      VectorTileLayer(
-                        key: const Key('VectorTileLayerWidget'),
-                        theme: OSMBrightTheme.osmBrightJaTheme(),
-                        tileProviders: TileProviders({
-                          'openmaptiles': VectorMBTilesProvider(
-                            mbtilesPath:
-                                '/data/user/0/com.example.example/cache/file_picker/belarus-gzip.mbtiles',
-                            tileCompression: TileCompression.gzip,
-                          )
-                        }),
-                      ),
-                    ])
-              : Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
+          : Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles();
 
-                      if (result != null) {
-                        log('result.files.single.path! ${result.files.single.path!}');
+                  if (result != null) {
+                    log('result.files.single.path! ${result.files.single.path!}');
 
-                        file = File(result.files.last.path!);
-                        setState(() {
-                          isOpen = true;
-                        });
-                      } else {
-                        // User canceled the picker
-                      }
-                    },
-                    child: const Text('open'),
-                  ),
-                ),
+                    file = File(result.files.last.path!);
+                    setState(() {
+                      isOpen = true;
+                    });
+                  } else {
+                    // User canceled the picker
+                  }
+                },
+                child: const Text('open'),
+              ),
+            ),
     );
   }
 }
