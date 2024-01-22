@@ -13,6 +13,11 @@ import 'package:vector_tile_renderer/vector_tile_renderer.dart'
 
 import 'osm_bright_ja_style.dart';
 
+extension OSMBrightTheme on ProvidedThemes {
+  static vector_tile_renderer.Theme osmBrightJaTheme({Logger? logger}) =>
+      ThemeReader(logger: logger).read(osmBrightJaStyle());
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PermissionService.initFilePermission();
@@ -44,8 +49,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-
-
 final lih = LatLng(47.159510, 9.553648);
 
 final belarus = LatLng(53.860543, 27.681657); // mkad
@@ -67,15 +70,22 @@ class _MyHomePageState extends State<MyHomePage> {
               options: MapOptions(
                 center: belarus,
                 zoom: 14,
-                maxZoom: 15.4, // max zoom
+                maxZoom: 15.4, //15.4 max zoom
               ),
               children: [
+                  // TileLayer(
+                  //   tileProvider: AssetTileProvider(),
+                  //   maxZoom: 14,
+                  //   urlTemplate: 'assets/map/anholt_osmbright/{z}/{x}/{y}.png',
+                  // ),
                   VectorTileLayer(
                     key: const Key('VectorTileLayerWidget'),
                     theme: OSMBrightTheme.osmBrightJaTheme(),
                     tileProviders: TileProviders({
                       'openmaptiles': VectorMBTilesProvider(
                         mbtilesPath: file!.path,
+                        maximumZoom: 15,
+                        minimumZoom: 6,
                         tileCompression: TileCompression.gzip,
                       )
                     }),
@@ -103,9 +113,4 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
     );
   }
-}
-
-extension OSMBrightTheme on ProvidedThemes {
-  static vector_tile_renderer.Theme osmBrightJaTheme({Logger? logger}) =>
-      ThemeReader(logger: logger).read(osmBrightJaStyle());
 }
