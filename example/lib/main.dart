@@ -44,16 +44,19 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
+
+final lih = LatLng(47.159510, 9.553648);
+
+final belarus = LatLng(53.860543, 27.681657); // mkad
+final gorvovka = LatLng(48.343987, 38.012386);
+
 class _MyHomePageState extends State<MyHomePage> {
   final MapController _mapController = MapController();
 
   bool isOpen = false;
 
   File? file;
-
-  final lih = LatLng(47.159510, 9.553648);
-
-  final belarus = LatLng(53.860543, 27.681657); // mkad
 
   @override
   Widget build(BuildContext context) {

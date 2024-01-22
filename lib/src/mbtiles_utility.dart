@@ -82,21 +82,26 @@ class MBTilesUtility {
       dbFullPath = path.join(databasesPath, dbFilename);
     }
 
-    print('dbFullPath ${dbFullPath}');
-    final exists = await databaseExists(dbFullPath);
-    print('does exists: ${exists}');
-    if (!exists) {
-      final file = File(_mbtilesPath);
-      final customBytes = await file.readAsBytes(); // Uint8List
-      final byteData = customBytes.buffer.asByteData();
+    print('dbFullPath $dbFullPath');
+    try {
+      final exists = await databaseExists(dbFullPath);
+      print('does exists: $exists');
+      if (!exists) {
+        final file = File(_mbtilesPath);
+        final customBytes = await file.readAsBytes(); // Uint8List
+        final byteData = customBytes.buffer.asByteData();
 
-      final List<int> bytes = byteData.buffer.asUint8List(
-        byteData.offsetInBytes,
-        byteData.lengthInBytes,
-      );
+        final List<int> bytes = byteData.buffer.asUint8List(
+          byteData.offsetInBytes,
+          byteData.lengthInBytes,
+        );
 
-      await File(dbFullPath).writeAsBytes(bytes, flush: true);
+        await File(dbFullPath).writeAsBytes(bytes, flush: true);
+      }
+    } catch (e, t) {
+      print('e: $e, $t');
     }
+
     return openDatabase(dbFullPath);
   }
 }
