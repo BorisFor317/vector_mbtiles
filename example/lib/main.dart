@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:example/scale_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -67,7 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         "C:/Users/medvedev.MECARO/Desktop/borovaya_air_port_8_17/{z}/{x}/{y}.png",
                   ),
-                  // TODO use for mbtiles
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    color: Colors.red,
+                    child: const FlutterMapScaleLayer(),
+                  ),
+                  // TODO use these code for mbtiles
                   // VectorTileLayer(
                   //   //  memoryTileCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
                   //   // memoryTileDataCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
@@ -96,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     log('result.files.single.path! ${result.files.single.path!}');
 
                     file = File(result.files.last.path!);
+
                     log('path ${file!.path}');
                     setState(() {
                       isOpened = true;
