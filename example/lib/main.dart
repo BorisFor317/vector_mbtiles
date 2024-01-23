@@ -1,27 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:example/permission_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:vector_map_tiles/vector_map_tiles.dart';
-import 'package:vector_mbtiles/vector_mbtiles.dart';
-import 'package:vector_tile_renderer/vector_tile_renderer.dart';
-import 'package:vector_tile_renderer/vector_tile_renderer.dart'
-    as vector_tile_renderer;
-
-import 'osm_bright_ja_style.dart';
-
-extension OSMBrightTheme on ProvidedThemes {
-  static vector_tile_renderer.Theme osmBrightJaTheme({Logger? logger}) =>
-      ThemeReader(logger: logger).read(osmBrightJaStyle());
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PermissionService.initFilePermission();
-  await PermissionService.initLocationPermission();
+
   runApp(const MyApp());
 }
 
@@ -49,47 +35,56 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-final lih = LatLng(47.159510, 9.553648);
-
 final belarus = LatLng(53.860543, 27.681657); // mkad
-final gorvovka = LatLng(48.343987, 38.012386);
 
 class _MyHomePageState extends State<MyHomePage> {
   final MapController _mapController = MapController();
 
-  bool isOpen = false;
+  bool isOpened = true;
 
   File? file;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isOpen
+      body: isOpened
           ? FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: belarus,
-                zoom: 14,
-                maxZoom: 15.4, //15.4 max zoom
+                onTap: (tapPosition, point) {
+                  print('selected ${point.toJson()}');
+                },
+                initialCenter: belarus,
+                initialZoom: 9,
+                maxZoom: 17, //15.4 max zoom mbtiles
               ),
               children: [
-                  // TileLayer(
-                  //   tileProvider: AssetTileProvider(),
-                  //   maxZoom: 14,
-                  //   urlTemplate: 'assets/map/anholt_osmbright/{z}/{x}/{y}.png',
-                  // ),
-                  VectorTileLayer(
-                    key: const Key('VectorTileLayerWidget'),
-                    theme: OSMBrightTheme.osmBrightJaTheme(),
-                    tileProviders: TileProviders({
-                      'openmaptiles': VectorMBTilesProvider(
-                        mbtilesPath: file!.path,
-                        maximumZoom: 15,
-                        minimumZoom: 6,
-                        tileCompression: TileCompression.gzip,
-                      )
-                    }),
+                  TileLayer(
+                    tileProvider: FileTileProvider(),
+                    maxZoom: 17,
+                    urlTemplate:
+                        // TODO provide your path
+
+                        "C:/Users/medvedev.MECARO/Desktop/borovaya_air_port_8_17/{z}/{x}/{y}.png",
                   ),
+                  // TODO use for mbtiles
+                  // VectorTileLayer(
+                  //   //  memoryTileCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
+                  //   // memoryTileDataCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
+                  //   memoryTileCacheMaxSize: 0,
+                  //   memoryTileDataCacheMaxSize: 0,
+
+                  //   key: const Key('VectorTileLayerWidget'),
+                  //   theme: OSMBrightTheme.osmBrightJaTheme(),
+                  //   tileProviders: TileProviders({
+                  //     'openmaptiles': VectorMBTilesProvider(
+                  //       mbtilesPath: file!.path,
+                  //       maximumZoom: 17,
+                  //       minimumZoom: 6,
+                  //       tileCompression: TileCompression.gzip,
+                  //     )
+                  //   }),
+                  // ),
                 ])
           : Center(
               child: ElevatedButton(
@@ -101,8 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     log('result.files.single.path! ${result.files.single.path!}');
 
                     file = File(result.files.last.path!);
+                    log('path ${file!.path}');
                     setState(() {
-                      isOpen = true;
+                      isOpened = true;
                     });
                   } else {
                     // User canceled the picker

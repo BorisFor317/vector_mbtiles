@@ -68,40 +68,17 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - assets/
-  #   - assets/map/anholt_osmbright/12/2177/
-  #   - assets/map/anholt_osmbright/12/2178/
-  #   - assets/map/anholt_osmbright/12/2179/
-  #   - assets/map/anholt_osmbright/12/2180/
-  #   - assets/map/anholt_osmbright/12/2181/
-  #   - assets/map/anholt_osmbright/13/4354/
-  #   - assets/map/anholt_osmbright/13/4355/
-  #   - assets/map/anholt_osmbright/13/4356/
-  #   - assets/map/anholt_osmbright/13/4357/
-  #   - assets/map/anholt_osmbright/13/4358/
-  #   - assets/map/anholt_osmbright/13/4359/
-  #   - assets/map/anholt_osmbright/13/4360/
-  #   - assets/map/anholt_osmbright/13/4361/
-  #   - assets/map/anholt_osmbright/13/4362/
-  #   - assets/map/anholt_osmbright/13/4363/
-  #   - assets/map/anholt_osmbright/14/8709/
-  #   - assets/map/anholt_osmbright/14/8710/
-  #   - assets/map/anholt_osmbright/14/8711/
-  #   - assets/map/anholt_osmbright/14/8712/
-  #   - assets/map/anholt_osmbright/14/8713/
-  #   - assets/map/anholt_osmbright/14/8714/
-  #   - assets/map/anholt_osmbright/14/8715/
-  #   - assets/map/anholt_osmbright/14/8716/
-  #   - assets/map/anholt_osmbright/14/8717/
-  #   - assets/map/anholt_osmbright/14/8718/
-  #   - assets/map/anholt_osmbright/14/8719/
-  #   - assets/map/anholt_osmbright/14/8720/
-  #   - assets/map/anholt_osmbright/14/8721/
-  #   - assets/map/anholt_osmbright/14/8722/
-  #   - assets/map/anholt_osmbright/14/8723/
-  #   - assets/map/anholt_osmbright/14/8724/
-  #   - assets/map/anholt_osmbright/14/8725/
-  #   - assets/map/anholt_osmbright/14/8726/
-  #   - assets/map/anholt_osmbright/14/8727/
+  #   - assets/mkad_10-15/10/590/
+  #   - assets/mkad_10-15/11/1181/
+  #   - assets/mkad_10-15/12/2362/
+  #   - assets/mkad_10-15/12/2363/
+  #   - assets/mkad_10-15/13/4725/
+  #   - assets/mkad_10-15/13/4726/
+  #   - assets/mkad_10-15/14/9451/
+  #   - assets/mkad_10-15/14/9452/
+  #   - assets/mkad_10-15/15/18903/
+  #   - assets/mkad_10-15/15/18904/
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
