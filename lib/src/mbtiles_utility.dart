@@ -5,7 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:vector_mbtiles/src/vector_mbtiles_provider.dart';
-
+import 'provider_exception.dart' as exception;
 /// MBTilesUtility is MBTiles access utility.
 class MBTilesUtility {
   /// A constructor of `MBTilesUtility` class.
@@ -25,9 +25,9 @@ class MBTilesUtility {
   Future<Uint8List> getVectorTileBytes(TileIdentity tile) async {
     final max = pow(2, tile.z).toInt();
     if (tile.x >= max || tile.y >= max || tile.x < 0 || tile.y < 0) {
-      throw ProviderException(
+      throw exception.ProviderException(
         message: 'Invalid tile coordinates $tile',
-        retryable: Retryable.none,
+        retryable: exception.Retryable.none,
         statusCode: 400,
       );
     }
@@ -58,9 +58,9 @@ class MBTilesUtility {
       }
       return extractedTile;
     } else if (resultSet.length > 1) {
-      throw ProviderException(
+      throw exception.ProviderException(
         message: 'Too many match tiles',
-        retryable: Retryable.none,
+        retryable: exception.Retryable.none,
       );
     } else {
       return Uint8List(0);

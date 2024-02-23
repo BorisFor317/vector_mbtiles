@@ -4,6 +4,7 @@ library vector_mbtiles;
 import 'dart:typed_data';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'mbtiles_utility.dart';
+import 'provider_exception.dart' as exception;
 
 enum TileCompression { gzip, none }
 
@@ -45,9 +46,9 @@ class VectorMBTilesProvider extends VectorTileProvider {
 
   void _checkTile(TileIdentity tile) {
     if (tile.z < 0 || tile.z > _maximumZoom || tile.x < 0 || tile.y < 0) {
-      throw ProviderException(
+      throw exception.ProviderException(
         message: 'out of range',
-        retryable: Retryable.none,
+        retryable: exception.Retryable.none,
       );
     }
   }
