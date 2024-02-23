@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   // TODO use these code for mbtiles
                   VectorTileLayer(
+                  concurrency: 2,
                     //  memoryTileCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
                     // memoryTileDataCacheMaxSize: 1024 * 1024 * 1024, // 1 gb
                     memoryTileCacheMaxSize: 0,
