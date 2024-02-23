@@ -5,7 +5,6 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:vector_mbtiles/src/vector_mbtiles_provider.dart';
-import 'provider_exception.dart';
 
 /// MBTilesUtility is MBTiles access utility.
 class MBTilesUtility {
