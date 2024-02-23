@@ -1,4 +1,18 @@
-Map<String, dynamic> osmBrightJaStyle() {
+// ignore_for_file: inference_failure_on_collection_literal
+
+import 'package:vector_tile_renderer/vector_tile_renderer.dart'
+    as vector_tile_renderer;
+import 'package:vector_tile_renderer/vector_tile_renderer.dart';
+
+const  light = "#f8f4f0";
+const dark = "#3A3939";
+
+extension OSMBrightTheme on ProvidedThemes {
+  static vector_tile_renderer.Theme darkTheme({Logger? logger, bool isLightmode =true}) =>
+      ThemeReader(logger: logger).read(mapStyle(isLightmode));
+}
+
+Map<String, dynamic> mapStyle(bool isLightmode) {
   return {
     "version": 8,
     "name": "Bright",
@@ -34,7 +48,7 @@ Map<String, dynamic> osmBrightJaStyle() {
       {
         "id": "background",
         "type": "background",
-        "paint": {"background-color": "#f8f4f0"}
+        "paint": {"background-color":light} // this theme
       },
       {
         "id": "landcover-glacier",
